@@ -1,4 +1,3 @@
-package connectfour
 import java.util.Collections ; import kotlin.system.exitProcess
 
 var P1 = ""; var P2 = ""; var currentPlayer = ""; var p1Score = 0; var p2Score = 0
