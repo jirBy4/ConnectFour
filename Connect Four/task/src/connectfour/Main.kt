@@ -52,13 +52,16 @@ fun amountOfGames() {
     when {
         !gameAmount.isEmpty() && (gameAmount.toIntOrNull() == null || gameAmount.toInt() <= 0) ->  {
             println("Invalid input"); amountOfGames() }
+        /// if player puts invalid input, asks again
 
         gameAmount.isEmpty() || gameAmount.toInt() == 1 -> {
             numGames = 1; println("$P1 VS $P2\n$rows X $columns board"); println("Single game") }
-
+        /// assumes single game if no input is made
+        
         gameAmount.toInt() > 1 -> {
             numGames = gameAmount.toInt(); onlyOneGame = false
             println("$P1 VS $P2\n$rows X $columns board"); println("Total $numGames games") }
+        /// plays amount of game based on input
     }
 }
 
@@ -74,6 +77,7 @@ fun fourSquareBoard(row:Int, column:Int) {
         currentSlot.addAll((dim..dim + column - 1).toMutableList())
         FSBSquares.add(currentSlot) }
 }
+/// creates the initial board storage
 
 fun boardPrint(rows:Int, columns:Int) {
     for (i in 1..columns) {
@@ -85,6 +89,7 @@ fun boardPrint(rows:Int, columns:Int) {
         println() }
     println("╚" + "═╩".repeat(columns -1) + "═╝")
 }
+/// creates the initial board
 
 fun playermove(rows:Int, columns:Int) {
     println("${currentPlayer}'s turn: ")
@@ -92,18 +97,23 @@ fun playermove(rows:Int, columns:Int) {
     when {
         move == "end" -> {
             println("Game over!"); exitProcess(1) }
-
+        /// ends the game if the player wants to
+        
         move == "ff" || move == "forfeit" -> tallyAndSwap(currentPlayer, false, true)
-
+        /// ends the game if player forfeits
+        
         move.toIntOrNull() == null -> {
             println("Incorrect column number"); playermove(rows, columns) }
-
+        /// prints error if there's an incorrect board placement 
+        
         move.toInt() !in 1..columns -> {
             println("The column number is out of range (1 - $columns)"); playermove(rows, columns) }
-
+        /// tells player if column number input is out of range
+        
         Collections.frequency(FSB[move.toInt() - 1], "║ ") == 0 -> {
             println("Column $move is full"); playermove(rows, columns) }
-
+        /// tells player if input column is full
+        
         else -> {
             for (i in rows - 1 downTo 0) {
                 when {
@@ -118,13 +128,15 @@ fun playermove(rows:Int, columns:Int) {
                         currentPlayer = P1; currentSquares = P1Squares; playermove(rows, columns) }
 
                     else -> continue
-                }
+                }               
             }
         }
+        /// places marker based on input choice
     }
 }
 
 fun winCondition() {
+    ///decides whether latest input makes player win game
     P1Squares.sort(); P2Squares.sort()
     if (moveCounter < 4 ) {
         return}
@@ -159,6 +171,7 @@ fun winCondition() {
 }
 
 fun tallyAndSwap(currPlayer: String, drawChecker: Boolean = false, surrChecker: Boolean = false) {
+    ///tallies the score and swaps first player in the next game
     when {
         currPlayer == P1 && drawChecker == false && surrChecker == false -> {
             p1Score += 2; currentPlayer = P2 }
@@ -185,6 +198,7 @@ fun tallyAndSwap(currPlayer: String, drawChecker: Boolean = false, surrChecker: 
 }
 
 fun currGame(games: Int, only1Game: Boolean = true) {
+    /// current game counter; shows which game is being played if player inputted more than 1
     when {
         totalGames == numGames -> {
             println("Game over!"); exitProcess(1) }
